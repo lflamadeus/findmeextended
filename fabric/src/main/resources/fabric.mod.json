@@ -1,0 +1,34 @@
+﻿{
+    "schemaVersion":  1,
+    "id":  "findmeextended",
+    "version":  "${version}",
+    "name":  "FindMeExtended",
+    "description":  "FindMeExtended searches nearby containers and retrieves items.",
+    "authors":  [
+                    "LAI"
+                ],
+    "contact":  {
+                    "homepage":  "https://github.com/lflamadeus/FindMe",
+                    "sources":  "https://github.com/lflamadeus/FindMe"
+                },
+    "license":  "CC0-1.0",
+    "environment":  "*",
+    "entrypoints":  {
+                        "main":  [
+                                     "com.lflamadeus.findmeextended.fabric.FindMeFabric"
+                                 ],
+                        "client":  [
+                                       "com.lflamadeus.findmeextended.fabric.FindMeClientFabric"
+                                   ]
+                    },
+    "mixins":  [
+                   "findmeextended-common.mixins.json"
+               ],
+    "accessWidener":  "findmeextended.accesswidener",
+    "depends":  {
+                    "fabricloader":  "\u003e=0.14.21",
+                    "fabric":  "*",
+                    "minecraft":  "1.20.1",
+                    "architectury":  "\u003e=9.1.12"
+                }
+}
