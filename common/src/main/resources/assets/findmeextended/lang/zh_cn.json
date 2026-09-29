@@ -2,5 +2,11 @@
   "key.findmeextended.search": "在附近的容器查找物品",
   "key.findmeextended.pull_one": "从附近容器取出1个物品",
   "key.findmeextended.pull_stack": "从附近容器取出一组物品",
-  "key.findmeextended.category": "FindMeExtended"
+  "key.findmeextended.category": "FindMeExtended",
+  "text.findmeextended.blacklist.added": "已加入黑名单：%s, %s, %s",
+  "text.findmeextended.blacklist.removed": "已移出黑名单：%s, %s, %s",
+  "text.findmeextended.blacklist.already": "该坐标已在黑名单中：%s, %s, %s",
+  "text.findmeextended.blacklist.absent": "该坐标不在黑名单中：%s, %s, %s",
+  "text.findmeextended.blacklist.not_container": "目标不是容器：%s, %s, %s",
+  "text.findmeextended.blacklist.out_of_range": "目标不在视距范围内：%s, %s, %s"
 }

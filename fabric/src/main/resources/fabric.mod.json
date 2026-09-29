@@ -1,4 +1,4 @@
-﻿{
+{
     "schemaVersion":  1,
     "id":  "findmeextended",
     "version":  "${version}",
@@ -15,10 +15,10 @@
     "environment":  "*",
     "entrypoints":  {
                         "main":  [
-                                     "com.lflamadeus.findmeextended.fabric.FindMeFabric"
+                                     "com.lai.findmeextended.fabric.FindMeFabric"
                                  ],
                         "client":  [
-                                       "com.lflamadeus.findmeextended.fabric.FindMeClientFabric"
+                                       "com.lai.findmeextended.fabric.FindMeClientFabric"
                                    ]
                     },
     "mixins":  [

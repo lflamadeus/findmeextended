@@ -2,5 +2,11 @@
     "key.findmeextended.search": "Search Nearby Inventories For Items",
     "key.findmeextended.pull_one": "Pull 1 Item From Nearby Inventories",
     "key.findmeextended.pull_stack": "Pull 1 Stack From Nearby Inventories",
-    "key.findmeextended.category": "FindMeExtended"
+    "key.findmeextended.category": "FindMeExtended",
+    "text.findmeextended.blacklist.added": "Blacklisted: %s, %s, %s",
+    "text.findmeextended.blacklist.removed": "Removed from blacklist: %s, %s, %s",
+    "text.findmeextended.blacklist.already": "Already blacklisted: %s, %s, %s",
+    "text.findmeextended.blacklist.absent": "Not blacklisted: %s, %s, %s",
+    "text.findmeextended.blacklist.not_container": "Target is not a container: %s, %s, %s",
+    "text.findmeextended.blacklist.out_of_range": "Target is outside view distance: %s, %s, %s"
 }
