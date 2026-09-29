@@ -18,9 +18,18 @@ public class FindMeConfig {
         private transient Color currentColor = null;
         public String PARTICLE_HIGHLIGHT_COLOR = "#ffffff";
         private transient Color currentParticleColor = null;
-        /** 黑名单容器高亮框的颜色，默认亮红：黑色名单语义是“别动这个容器”，也要足够显眼。 */
-        public String BLACKLIST_HIGHLIGHT_COLOR = "#FF3B30";
-        private transient Color currentBlacklistHighlightColor = null;
+        /**
+         * 黑名单容器高亮的轮廓颜色，默认亮黄。
+         * <p>
+         * 用黄而不是红：红色在 MC 里已经被「危险 / 敌对 / 掉血」占满了，玩家看到红框猜不到
+         * 「这个容器被排除在搜索之外」。黄色配上深灰填充更像「警示 / 别动这里」。
+         * 色值与 {@link #CONTAINER_HIGHLIGHT_COLOR}（搜索结果的金色）刻意拉开明度和饱和度。
+         */
+        public String BLACKLIST_HIGHLIGHT_COLOR = "#FFE533";
+        /** 黑名单高亮的填充颜色，默认深灰；配合黄色轮廓表达「这个容器不可用」。 */
+        public String BLACKLIST_FILL_COLOR = "#2D2D2D";
+        /** 黑名单填充的不透明度（0~1）。设为 0 就只剩轮廓。 */
+        public double BLACKLIST_FILL_ALPHA = 0.52D;
 
 
         public Color getColor() {
@@ -45,17 +54,6 @@ public class FindMeConfig {
                 }
             }
             return currentParticleColor;
-        }
-
-        public Color getBlacklistHighlightColor() {
-            if (currentBlacklistHighlightColor == null) {
-                try {
-                    currentBlacklistHighlightColor = Color.decode(BLACKLIST_HIGHLIGHT_COLOR.toLowerCase());
-                } catch (NumberFormatException e) {
-                    currentBlacklistHighlightColor = Color.decode("#FF3B30");
-                }
-            }
-            return currentBlacklistHighlightColor;
         }
 
 

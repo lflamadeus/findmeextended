@@ -1,6 +1,7 @@
 package com.lai.findmeextended.mixin;
 
 import com.lai.findmeextended.client.BlacklistClient;
+import com.lai.findmeextended.client.BlacklistHighlightStyle;
 import com.lai.findmeextended.client.BlacklistHighlighter;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
@@ -29,6 +30,7 @@ public class MixinBlacklistHighlight {
                                                          boolean renderBlockOutline, Camera camera,
                                                          GameRenderer gameRenderer, LightTexture lightTexture,
                                                          Matrix4f projectionMatrix, CallbackInfo ci) {
-        BlacklistHighlighter.render(poseStack, camera, BlacklistClient.highlightedPositions());
+        BlacklistHighlighter.render(poseStack, camera, BlacklistClient.highlightedPositions(),
+                BlacklistHighlightStyle.current());
     }
 }

@@ -95,6 +95,10 @@ public final class BlacklistService {
      * 比逐格或逐区块枚举方块实体低好几个数量级。顺带把「方块实体已经不在」或「已经不是容器」的条目
      * 清掉，避免无效坐标长期积累——清理只在玩家手持工具、主动索取高亮时发生，所以拆掉容器后立刻
      * 在原坐标放回新容器仍然是黑名单（黑名单只认坐标）。
+     * <p>
+     * 双箱子会把另一半也一起回报：黑名单按坐标较小的那一半存，但两半共用同一份库存，只高亮一半
+     * 会让玩家以为另一半没被排除。展开放在这里做，客户端拿到什么就画什么，不必自己再查方块状态
+     * （客户端的区块不一定加载着）。
      */
     private static List<BlockPos> collectVisible(ServerPlayer player, ContainerBlacklist blacklist) {
         ServerLevel level = player.serverLevel();
@@ -110,6 +114,10 @@ public final class BlacklistService {
                 continue;
             }
             visible.add(pos);
+            BlockPos partner = ChestCoordinates.partner(level, pos);
+            if (partner != null) {
+                visible.add(partner);
+            }
         }
         if (!stale.isEmpty()) {
             blacklist.removeAll(stale);

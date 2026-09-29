@@ -24,13 +24,22 @@ import java.util.List;
  */
 public final class BlacklistClient {
 
-    /** 手持工具期间索取一次黑名单坐标的间隔（tick）。 */
+    /** 手持工具期间重新索取黑名单坐标的间隔（tick）。 */
     private static final int SYNC_INTERVAL_TICKS = 20;
 
     private static final int LEFT_BUTTON = GLFW.GLFW_MOUSE_BUTTON_LEFT;
     private static final int RIGHT_BUTTON = GLFW.GLFW_MOUSE_BUTTON_RIGHT;
 
-    private static List<BlockPos> highlighted = List.of();
+    /**
+     * 服务端回报的、当前维度视距内的黑名单坐标。
+     * <p>
+     * 与 {@link #active} 刻意分开：这里是「服务端告诉我黑名单里有什么」，是数据；{@link #active}
+     * 是「我现在拿没拿工具」，是渲染开关。分开之后，收起工具再拿出来不会丢掉已知坐标，因此
+     * 高亮可以在一帧之内出现，不必等一次服务端往返。
+     */
+    private static List<BlockPos> snapshot = List.of();
+    /** 是否正在手持黑名单工具；渲染只认它。 */
+    private static boolean active;
     /** 上一次同步时所在的客户端世界，用来在换维度/换世界时立刻丢弃旧坐标。 */
     private static ClientLevel lastLevel;
     private static long ticks;
@@ -41,13 +50,21 @@ public final class BlacklistClient {
 
     /** 当前应当高亮的黑名单坐标（服务端回报的视距内坐标），供渲染读取。 */
     public static List<BlockPos> highlightedPositions() {
-        return highlighted;
+        return active ? snapshot : List.of();
     }
 
-    /** 服务端回报的黑名单快照与本次操作结果。 */
+    /**
+     * 服务端回报的黑名单快照与本次操作结果。
+     * <p>
+     * {@code IGNORED} 表示服务端不认这次请求（配置里两边工具不一致，或者手持切换的包还没到服务端）。
+     * 这时保留上一轮的坐标而不是清空：屏幕上已经画出来的高亮不该因为一次被拒绝的同步而闪掉，
+     * 下一次同步会把它纠正过来。
+     */
     public static void acceptSync(BlockPos target, List<BlockPos> positions,
                                   BlacklistSyncMessage.Outcome outcome) {
-        highlighted = List.copyOf(positions);
+        if (outcome != BlacklistSyncMessage.Outcome.IGNORED) {
+            snapshot = List.copyOf(positions);
+        }
         String key = messageKey(outcome);
         LocalPlayer player = Minecraft.getInstance().player;
         if (key == null || player == null) {
@@ -57,24 +74,32 @@ public final class BlacklistClient {
                 Component.translatable(key, target.getX(), target.getY(), target.getZ()), true);
     }
 
-    /** 每个客户端 tick：手持工具时定期同步黑名单坐标。 */
+    /** 每个客户端 tick：手持工具时同步黑名单坐标，并维护高亮开关。 */
     public static void tick(Minecraft client) {
         ticks++;
         ClientLevel level = client.level;
         LocalPlayer player = client.player;
         if (level == null || player == null) {
             lastLevel = null;
-            clearHighlight();
+            active = false;
             return;
         }
         if (level != lastLevel) {
-            // 换维度或换世界：旧坐标属于旧维度，立刻丢掉，等下一次同步补上新的。
+            // 换维度或换世界：旧坐标属于旧维度，连快照一起丢掉，等下一次同步补上新的。
             lastLevel = level;
-            clearHighlight();
+            snapshot = List.of();
+            active = false;
         }
         if (!BlacklistTool.isHeld(player)) {
-            clearHighlight();
+            active = false;
             return;
+        }
+        if (!active) {
+            // 刚拿出工具：立刻开渲染，并在这一 tick 就发同步请求，不等 20 tick 的周期。
+            // 上一轮拿到的坐标已经能画（见 highlightedPositions），所以从「拿出工具」到
+            // 「看到高亮」之间没有网络往返造成的空窗；服务端结果回来后再替换成最新的。
+            active = true;
+            nextSyncTick = ticks;
         }
         if (ticks >= nextSyncTick) {
             FindMeMod.CHANNEL.sendToServer(
@@ -130,17 +155,14 @@ public final class BlacklistClient {
         return client.hitResult instanceof BlockHitResult hit ? hit.getBlockPos() : null;
     }
 
-    /** 坐标是否在黑名单里；双箱子按归一化后的那一半判断。 */
+    /**
+     * 坐标是否在黑名单里；双箱子按归一化后的那一半判断。
+     * <p>
+     * 读快照而不是 {@link #highlightedPositions()}：左键移出只要求「目标确实在黑名单里」，
+     * 与「现在画不画」无关，而调用方已经单独判定过是否手持工具了。
+     */
     private static boolean isBlacklisted(Minecraft client, BlockPos pos) {
-        return highlighted.contains(ChestCoordinates.canonical(client.level, pos));
-    }
-
-    /** 不再手持工具时丢掉高亮，并让下次手持立刻重新同步。 */
-    private static void clearHighlight() {
-        if (!highlighted.isEmpty()) {
-            highlighted = List.of();
-        }
-        nextSyncTick = 0L;
+        return snapshot.contains(ChestCoordinates.canonical(client.level, pos));
     }
 
     /** 操作结果对应的提示文本；纯同步与静默忽略没有提示。 */
