@@ -8,8 +8,8 @@
                     "LAI"
                 ],
     "contact":  {
-                    "homepage":  "https://github.com/lflamadeus/FindMe",
-                    "sources":  "https://github.com/lflamadeus/FindMe"
+                    "homepage":  "https://github.com/lflamadeus/findmeextended",
+                    "sources":  "https://github.com/lflamadeus/findmeextended"
                 },
     "license":  "CC0-1.0",
     "environment":  "*",
