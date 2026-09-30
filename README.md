@@ -4,7 +4,7 @@ FindMeExtended 是一个面向 Minecraft 1.20.1、基于 Architectury 的模组�
 
 ## 项目来源
 
-本项目 fork 自 [Buuz135/FindMe](https://github.com/Buuz135/FindMe)。原项目许可证保持不变，详见 [LICENSE](LICENSE)。
+本项目 fork 自 [Buuz135/FindMe](https://github.com/Buuz135/FindMe)。上游以 CC0 1.0（公有领域奉献）发布，本仓库在保留上游著作权声明（Copyright (c) 2018 Buuz135）的前提下以 MIT 发布，详见 [LICENSE](LICENSE)。
 
 ## 主要改动
 
