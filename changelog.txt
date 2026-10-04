@@ -1,14 +1,20 @@
 更新日志
 ========
 
+1.0.5 - 2026-10-04
+------------------
+- fabric.mod.json 与 mods.toml 的 license 字段由 CC0-1.0 改为 MIT，与 LICENSE、README 一致（游戏内模组列表读的就是这个字段）。
+- 新增 changelog.txt：项目更名、Java 包名迁移等版本沿革从 README 移到这里。
+- README 精简：删掉「主要改动」小节与黑名单高亮的渲染实现论证，补上「功能」「安装」两节，Java 要求写明为 17 或更高版本。
+- 发布流程改为发布到本仓库的 GitHub Releases：原工作流里的 CurseForge / Modrinth 项目 ID 属于上游作者的页面，已移除。
+- 无代码改动：Java 源码与 1.0.4 一致。
+
 1.0.4 - 2026-09-30
 ------------------
-- 授权改为 MIT：仓库根目录的 LICENSE 是唯一授权声明，保留上游著作权声明（Copyright (c) 2018 Buuz135）；fabric.mod.json 与 mods.toml 的 license 字段同步由 CC0-1.0 改为 MIT。
+- 授权改为 MIT：仓库根目录的 LICENSE 是唯一授权声明，保留上游著作权声明（Copyright (c) 2018 Buuz135）。
 - 元数据指向更名后的仓库：fabric.mod.json 的 homepage / sources 由 https://github.com/lflamadeus/FindMe 改为 https://github.com/lflamadeus/findmeextended。
-- README 精简：删掉「主要改动」小节与黑名单高亮的渲染实现论证，补上「功能」「安装」两节，Java 要求写明为 17 或更高版本。
-- 新增 changelog.txt：项目更名、Java 包名迁移等版本沿革从 README 移到这里。
-- 发布流程改为发布到本仓库的 GitHub Releases：原工作流里的 CurseForge / Modrinth 项目 ID 属于上游作者的页面，已移除。
-- 无代码改动：Java 源码与 1.0.3 一致。
+- README 补上 1.0.3 的黑名单高亮说明。
+- 无代码改动：源码与资源与 1.0.3 一致。
 
 1.0.3 - 2026-09-29
 ------------------
