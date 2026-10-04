@@ -1,0 +1,34 @@
+更新日志
+========
+
+1.0.4 - 2026-09-30
+------------------
+- 授权改为 MIT：仓库根目录的 LICENSE 是唯一授权声明，保留上游著作权声明（Copyright (c) 2018 Buuz135）；fabric.mod.json 与 mods.toml 的 license 字段同步由 CC0-1.0 改为 MIT。
+- 元数据指向更名后的仓库：fabric.mod.json 的 homepage / sources 由 https://github.com/lflamadeus/FindMe 改为 https://github.com/lflamadeus/findmeextended。
+- README 精简：删掉「主要改动」小节与黑名单高亮的渲染实现论证，补上「功能」「安装」两节，Java 要求写明为 17 或更高版本。
+- 新增 changelog.txt：项目更名、Java 包名迁移等版本沿革从 README 移到这里。
+- 发布流程改为发布到本仓库的 GitHub Releases：原工作流里的 CurseForge / Modrinth 项目 ID 属于上游作者的页面，已移除。
+- 无代码改动：Java 源码与 1.0.3 一致。
+
+1.0.3 - 2026-09-29
+------------------
+- 黑名单高亮改成两层：亮黄轮廓 #FFE533 + 深灰半透明填充 #2D2D2D @ α0.52，新增 BLACKLIST_FILL_COLOR / BLACKLIST_FILL_ALPHA 两个配置项。
+- 渲染不再走 RenderType / MultiBufferSource，改成照 WorldEditCUI 的画法自开 Tesselator 并显式设置 RenderSystem 状态（RenderType 会在 endBatch 里重设状态，从外面压不住深度测试；rendertype_lines 还会做线性雾，故关雾并在 finally 还原）。
+- 修复边框与方块表面 z-fighting、忽隐忽现，以及被墙挡住时不显示。
+- 修复双箱子只高亮一半：抽出 ChestCoordinates.partner()，服务端回报两半坐标。
+- 修复换上黑名单工具后要等一次服务端往返才出高亮：快照不再随收起工具清空，激活改为边沿触发、同一 tick 就发同步。
+
+1.0.2 - 2026-09-29
+------------------
+- 新增容器黑名单：手持黑名单工具（默认木剑，COMMON.BLACKLIST_TOOLS）时，视距内的黑名单容器持续高亮，潜行右键加入、潜行左键移出；按维度存进存档、只认坐标，查找与取出都跳过黑名单容器，失效条目在索取高亮时自动清理。
+- 高亮改为每帧绘制的方块描边（LevelRenderer.renderLineBox + RenderType.lines），不再用粒子：粒子小、会淡出，靠定期补发才看起来连续，补发之间还会明暗跳变。
+- 取出物品：按住 Alt 再按「取出一组」尽可能填满背包；服务端按主背包剩余空间截断请求量，不会因为放不下而把物品丢在地上（普通「取出一组」同样受此限制）。
+- 新增公开接口 com.lai.findmeextended.api.FindMeBlacklistApi，供其他模组（配方材料发送器）读取黑名单。
+- 双箱子两半共用库存，黑名单统一记坐标较小的那一半，两半都点也只是同一条记录。
+- Java 包名 com.lflamadeus.findmeextended 改为 com.lai.findmeextended，并同步更新模组 ID、资源命名与构建产物名称，减少与原项目的标识冲突。
+
+1.0.1 - 2026-09-05
+------------------
+- 首次发布：自上游 FindMe 1.20.1-3.2.3 分叉，项目更名为 FindMeExtended，作者 LAI。
+- 保留原有附近容器查找和取出功能，保留 Fabric 与 Forge 双平台结构。
+- Forge 端新增 AE2 容器支持：ME Drive、ME Chest，以及通过 AE2 MEStorage 能力提供存储的第三方容器（AE2 为可选依赖）。
